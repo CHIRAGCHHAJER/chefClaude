@@ -1,5 +1,5 @@
 'use client'
-
+     
 
 import Image from "next/image";
 import { Geist } from "next/font/google";
@@ -34,6 +34,9 @@ try{
  //     const result = await askHuggingFace(question);
  //     console.log("Result from Hugging Face: ",(typeof result === 'string' ? result : JSON.stringify(result)));
  const response = await askDeepSeekR1(question) ;
+ 
+ //const response = { response :  "[\"```markdown\\n## Classic Tomato Bruschetta 🍅🍞  \\nBright and refreshing Italian-inspired appetizer featuring toasted bread topped with juicy tomatoes and aromatic herbs.\\n\\n### Ingredients  \\n- **Bread** (4 thick slices, preferably baguette or ciabatta)  \\n- **Tomato** (1 large, finely diced)  \\n- **Onion** (¼ cup, finely chopped)  \\n- **Oregano** (1 tsp dried or 1 tbsp fresh)  \\n- Olive oil (2 tbsp + extra for brushing)  \\n- Salt and pepper to taste  \\n- Optional: 1 garlic clove for rubbing  \\n\\n### Instructions  \\n1. Preheat oven to 400°F (200°C). Brush **bread** slices with olive oil and toast for 5-8 minutes until golden.  \\n2. Combine diced **tomato**, chopped **onion**, **oregano**, 2 tbsp olive oil, salt, and pepper in a bowl.  \\n3. Rub warm toast with garlic (if using). Spoon tomato mixture generously over bread.  \\n4. Serve immediately. *Serves 2.*\\n\\n## Savory Tomato-Onion Melt 🥪🧅  \\nHearty open-faced sandwich with caramelized onions and tomatoes, finished with aromatic oregano.\\n\\n### Ingredients  \\n- **Bread** (2 thick slices)  \\n- **Tomato** (1 medium, sliced)  \\n- **Onion** (1 medium, thinly sliced)  \\n- **Oregano** (½ tsp dried)  \\n- **Sauces** (2 tbsp mayo or garlic aioli)  \\n- Cooking oil (1 tbsp)  \\n- Salt and pepper to taste  \\n- Optional: Cheese (mozzarella or cheddar)  \\n\\n### Instructions  \\n1. Heat oil in a pan over medium-low. Cook **onion** with a pinch of salt for 10-12 minutes until caramelized.  \\n2. Spread **sauces** on **bread**. Top with **tomato** slices and caramelized onions. Sprinkle **oregano**, salt, and pepper.  \\n3. Add cheese if desired. Broil 3-4 minutes until edges are crisp. *Serves 1-2.*\\n\\n## Oregano-Infused Tomato Dip 🥣🌿  \\nWarm, chunky tomato dip perfect for bread slices, infused with fragrant oregano.\\n\\n### Ingredients  \\n- **Tomato** (2 large, diced)  \\n- **Onion** (½ cup, finely chopped)  \\n- **Oregano** (1 tsp dried)  \\n- **Bread** (toasted slices for serving)  \\n- **Sauces** (1 tbsp ketchup or tomato paste)  \\n- Olive oil (1 tbsp)  \\n- Salt and pepper to taste  \\n- Optional: Pinch of red pepper flakes  \\n\\n### Instructions  \\n1. Heat oil in a saucepan. Sauté **onion** until soft (5 minutes).  \\n2. Add **tomato**, **oregano**, **sauces**, salt, pepper, and optional chili flakes. Simmer 10-12 minutes until thickened.  \\n3. Mash lightly with a fork for chunky texture. Serve warm with toasted **bread**. *Serves 2.*\\n\\n## Pantry Pizzettes 🍕🍅  \\nMini open-faced pizzas using bread as the base, topped with zesty tomato sauce and herbs.\\n\\n### Ingredients  \\n- **Bread** (4 slices, sturdy variety)  \\n- **Tomato** (1, finely diced)  \\n- **Onion** (¼ cup, minced)  \\n- **Oregano** (1 tsp dried)  \\n- **Sauces** (3 tbsp marinara or tomato sauce)  \\n- Olive oil for brushing  \\n- Optional toppings: Grated cheese, black olives  \\n\\n### Instructions  \\n1. Preheat oven to 425°F (220°C). Brush **bread** with oil and bake 5 minutes until crisp.  \\n2. Mix **tomato**, **onion**, and **oregano** into **sauces**. Spread over toasted bread.  \\n3. Add optional toppings. Bake 8-10 minutes until edges are golden. *Serves 2.*\\n```\"]" }
+ 
  console.log("Response received at the frontEnd from DeepSeeekR1✅: " , response ) ;
  console.log("response.response : " , response.response) ;
  console.log("response in string : ",JSON.stringify(response.response)) ;
@@ -41,7 +44,7 @@ try{
  const  responseJsonString = JSON.stringify(response.response);
  //console.log("Result from DeepSeekR1 : ", responseJsonString );
 
- setRecipe(responseJsonString);
+setRecipe(responseJsonString) ;
     
 }catch(err){
  setRecipe('Error: ' + err.message);
@@ -76,10 +79,9 @@ try{
     </div>
     }
     
-     {recipe.length>0 && <div><Recipe content = {recipe} /></div>} 
+     {recipe.length>0 && <div><Recipe content = {`${recipe}`} /></div>} 
      {/* {recipe.length>0 && <div>{(async function(){return await recipe.json()})()}</div>} */}
-
-
+  
 
 
 
@@ -88,7 +90,6 @@ try{
    </>
   );
 }
-
 
 
 

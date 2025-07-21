@@ -3,7 +3,7 @@
 import { NextResponse } from "next/server";
 // const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // console.log("Api key from ask.js : " + process.env.GEMINI_API_KEY);
-
+        
 // export default async function handler(req, res) {
 //   if (req.method !== 'POST') {
 //     return res.status(405).json({ error: 'Only POST allowed' });
@@ -180,6 +180,7 @@ Formatting Requirements:
 
 Markdown Language: The entire output must be in standard Markdown format.
 Recipe Card Structure: 
+Start with the first recipe level2 heading(##) with underline under it .
 give the text color : hex #7d785f and adjust the font-weight according to if it is a heading(then font should be bold) , if it is a parargh(text should be normal) etc .
 Start each recipe with a level 2 heading (##) with underline under it .
 Include a short, enticing description (p tag equivalent).
@@ -226,7 +227,7 @@ Preparation/Cook Time (Optional but helpful): If feasible, include estimated pre
     );
   }
 
-  try {
+try {
     const openRouterResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST", // The call to OpenRouter's API itself will still be a POST request
       headers: {
@@ -259,17 +260,12 @@ Preparation/Cook Time (Optional but helpful): If feasible, include estimated pre
       );
     }
 
-    // Correctly parse the JSON response body from OpenRouter
-    var data = await openRouterResponse.json();
-    console.log("Parsed Data from DeepSeek API call:", data);
+ var data = await openRouterResponse.json();
+ console.log("Parsed Data from DeepSeek API call:", data);
 
-    // DeepSeek's response structure usually has 'choices[0].message.content'
-    // The previous `console.log("Message from DeepSeek : ",data.message)` was likely incorrect
-    // as `data.message` doesn't exist at the top level in OpenRouter's completion response.
-    // It's `data.choices[0].message.content`.
-    // Let's stick to the correct path.
 
-    // Validate the structure of the AI response
+
+
     if (!data.choices || data.choices.length === 0 || !data.choices[0].message || !data.choices[0].message.content) {
       console.error('Unexpected response structure from DeepSeek API❌:', data);
       return NextResponse.json(
@@ -283,15 +279,81 @@ Preparation/Cook Time (Optional but helpful): If feasible, include estimated pre
         console.log("choice🔥🔥🔥 : ",choice.message.content ) ;
         return choice.message.content ;
     })
-    
-    for(const recipe of result)
-    {console.log("Another recipe 🔥🔥🔥🔥🔥🔥 : ", recipe ) ;
+
+   var resultJsonString = JSON.stringify(result) ;
+
+    // Correctly parse the JSON response body from OpenRouter
+  
+
+try {
+      // 1. Parse the outer JSON array
+      var parsedArray = JSON.parse(resultJsonString);
+      console.log("content before parsing under try block : " , resultJsonString) ;
+      console.log("content after json parsed : ", parsedArray) ;
+      // 2. The actual markdown content is the first element of this array
+      //    (and it's still escaped at this point)
+      var escapedMarkdown = parsedArray[0];
+      console.log("escapedMarkdown : " , escapedMarkdown) ;
+      console.log("type of escapedMarkdown : ",typeof(escapedMarkdown), " length : ",escapedMarkdown.length) ;
+      let processedMarkdown = escapedMarkdown ;
+      if (processedMarkdown.startsWith('```markdown\\n')) {
+        console.log("start with ```markdown\\n ❌❌❌❌❌❌❌") ;
+        processedMarkdown = processedMarkdown.substring('```markdown\\n'.length);
+      }
+      if (processedMarkdown.endsWith('\\n```')) {
+        console.log("ends with \\n```❌❌❌❌❌❌")
+        processedMarkdown = processedMarkdown.substring(0, processedMarkdown.length - '\\n```'.length);
+      }    
+      console.log("processedMarkdown : ",processedMarkdown) ;  
+      // 3. Unescape the newline characters, which are represented as '\\n' in the string
+      //    JSON.parse() correctly handles the double quotes, but not the double backslashes
+      //    for newlines within the string content.
+      var unescapedMarkdown = processedMarkdown.replace(/\\n/g, '\n'); // Replace \\n with actual newline
+      // Also replace \\ for general escaped backslashes if any other exist, though less common here.
+      // const unescapedMarkdown = unescapedMarkdown.replace(/\\(["])/g, '$1'); // This handles \" if needed, but JSON.parse usually does this.
+      console.log("MarkdownToRender : " , unescapedMarkdown) ;
+      
+      return NextResponse.json({ response : unescapedMarkdown });
+      
+
+
+    } catch (error) {
+      console.error("Failed to parse or unescape markdown string:", error);
+      setRecipe("Error loading recipes. Please check the data format.");
     }
 
 
 
+
+
+    // DeepSeek's response structure usually has 'choices[0].message.content'
+    // The previous `console.log("Message from DeepSeek : ",data.message)` was likely incorrect
+    // as `data.message` doesn't exist at the top level in OpenRouter's completion response.
+    // It's `data.choices[0].message.content`.
+    // Let's stick to the correct path.
+
+    // Validate the structure of the AI response
+    // if (!data.choices || data.choices.length === 0 || !data.choices[0].message || !data.choices[0].message.content) {
+    //   console.error('Unexpected response structure from DeepSeek API❌:', data);
+    //   return NextResponse.json(
+    //     { error: 'Unexpected response format from DeepSeek API. Please check OpenRouter logs or model availability❌.' },
+    //     { status: 500 }
+    //   );
+    // }
+    // console.log("Response from the deepseekR1 : ", JSON.stringify(data)) ;
+    
+    // var result = data.choices.map((choice , index )=>{
+    //     console.log("choice🔥🔥🔥 : ",choice.message.content ) ;
+    //     return choice.message.content ;
+    // })
+    
+   
+
+    
+
+
+
     // Return the AI's answer back to the client
-    return NextResponse.json({ response : JSON.stringify(result) });
 
   } catch (error) {
     console.error('Server-side fetch error:', error);
