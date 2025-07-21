@@ -3,11 +3,20 @@ chefClaude
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+
+## Setup
+
+1. Clone the repository
+2. Copy `.env.example` to `.env`
+3. Add your own DeepSeek API key and secret in the `.env` file
+4. Run the development server:
+
 ## Getting Started
 
 First, run the development server:
 
 ```bash
+npm install
 npm run dev
 # or
 yarn dev
