@@ -1,4 +1,4 @@
-import fetchGemini from '../../../lib/fetchGemini';
+import fetchGemini from '../../lib/fetchGemini.js' ; 
 
 export async function GET(req) {
   try {

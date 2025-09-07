@@ -13,6 +13,7 @@
     "dotenv": "^17.2.2",
     "github-markdown-css": "^5.8.1",
     "next": "15.3.2",
+    "node-fetch": "^3.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",

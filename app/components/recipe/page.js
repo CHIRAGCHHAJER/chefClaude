@@ -131,6 +131,8 @@ while (content && content!== "" && content.endsWith('"')) { // Correct: Call end
 console.log("after processing and stripping the double quotes . content : ", content) ;
 console.log("typeof content : ", typeof(content)) ;
 
+
+
   return (
   ( (content && content !== "") && ( <div className="recipe-container">
       <ReactMarkdown
