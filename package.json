@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "dotenv": "^17.2.2",
     "github-markdown-css": "^5.8.1",
     "next": "15.3.2",
     "react": "^19.0.0",
