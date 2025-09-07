@@ -5,8 +5,6 @@ import Image from "next/image";
 import { Geist } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
 import  React from "react";
-//import logo from "C:/Users/chira/OneDrive/Desktop/Next-3/my-next-app/public/logo/appLogo.svg";
-//import logo from '../public/logo/appLogo.svg'
 import logo from '../public/logo/cooking.png';
 import Form from "./components/Form/page.js";
 import {useState, useEffect} from 'react' ;
@@ -56,7 +54,7 @@ setRecipe(responseJsonString) ;
   return (
    <>
     <div className = "div1  bg-[rgba(221,217,199,0.7)] flex flex-col  h-[95vh] min-h-[710px] w-[90vw] min-w-[490px] border-[3px] border-solid border-[rgba(221,217,199,0.9)] rounded-[3px] shadow-inner py-[1px] px-[1px] -px-[1px]" >
-     <header className = "header bg-[rgba(213,201,155,0.9)] flex flex-row justify-center items-center gap-[4px] shadow-lg rounded-[3px] min-h-[70px] w-[100%]"><img className = "appLogo h-[70px] w-[70px]" src = 'logo/cooking.png' alt = "Logo" /><h1 className = " font-semibold text-[35px] text-[rgba(125,120,95,1)]">Chef Claude</h1></header>
+     <header className = "header bg-[rgba(213,201,155,0.9)] flex flex-row justify-center items-center gap-[4px] shadow-lg rounded-[3px] min-h-[70px] w-[100%]"><Image height={70} width={70} className = "appLogo h-[70px] w-[70px]" src = 'logo/cooking.png' alt = "Logo" /><h1 className = " font-semibold text-[35px] text-[rgba(125,120,95,1)]">Chef Claude</h1></header>
      <Form setIngredients = {setIngredients}/>
      <br/>
      {(ingredients.length > 0 )? <h1 className = "text-[20px]  text-[rgba(125,120,95,1)] mx-[2px] font-[700] ">Ingredients on Hand : </h1> : null }
