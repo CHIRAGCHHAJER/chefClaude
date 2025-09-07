@@ -2,8 +2,6 @@
      
 
 import Image from "next/image";
-import { Geist } from "next/font/google";
-import { Geist_Mono } from "next/font/google";
 import  React from "react";
 import logo from '../public/logo/cooking.png';
 import Form from "./components/Form/page.js";
