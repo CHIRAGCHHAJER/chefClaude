@@ -134,7 +134,7 @@ console.log("typeof content : ", typeof(content)) ;
 
 
   return (
-  ( (content && content !== "") && ( <div className="recipe-container">
+  ( (content && content !== "") && ( <div className="recipe-container text-[rgba(125,120,95,1)] font-500">
       <ReactMarkdown
         // Use remarkPlugins to enable GitHub Flavored Markdown (tables, task lists, strikethrough, etc.)
         remarkPlugins={[remarkGfm]}
