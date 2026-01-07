@@ -8,7 +8,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 1. Clone the repository
 2. Copy `.env.example` to `.env`
-3. Add your own DeepSeek API key and secret in the `.env` file
+3. Add your own Gemini API key (for the gemini model : gemini-2.5-flash) as GEMINI_API_KEY in the `.env` file
 4. Run the development server:
 
 ## Getting Started
