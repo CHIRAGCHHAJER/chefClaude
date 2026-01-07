@@ -1,3 +1,5 @@
+import {NextResponse} from 'next/server'
+
 // import fetch from 'node-fetch';
 
 // const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -11,7 +13,7 @@
 // Formatting Requirements:
 
 // Markdown Language: The entire output must be in standard Markdown format.
-// Recipe Card Structure: 
+// Recipe Card Structure:
 // Start with the first recipe level2 heading(##) with underline under it .
 // give the text color : hex #7d785f and adjust the font-weight according to if it is a heading(then font should be bold) , if it is a parargh(text should be normal) etc .
 // Start each recipe with a level 2 heading (##) with underline under it .
@@ -31,7 +33,7 @@
 // Prioritize Available Ingredients: Focus on recipes that primarily use the provided ingredients. Minor, common pantry staples (like salt, pepper, water, basic cooking oil) can be assumed if essential, but do not introduce major new ingredients not listed.
 // Variety (if possible): If the ingredients allow, provide a variety of meal types (e.g., breakfast, lunch, dinner, snack).
 // Clarity and Conciseness: Instructions should be clear, step-by-step, and concise.
-// Yield/Servings (Optional but helpful): If feasible, include an estimated serving size or yield.` ; 
+// Yield/Servings (Optional but helpful): If feasible, include an estimated serving size or yield.` ;
 
 //   const response = await fetch(
 //     'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
@@ -54,14 +56,18 @@
 //   return recipe;
 // }
 
-import fetch from 'node-fetch';
+import fetch from 'node-fetch'
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_MODEL = 'gemini-2.5-flash';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY
+const GEMINI_MODEL = 'gemini-2.5-flash'
+
+//console.log(`Gemini API : ${GEMINI_API_KEY}`)
 
 export default async function fetchGemini(ingredients) {
-//  const prompt = `Suggest a recipe using ALL of these ingredients: ${ingredients.join(', ')}`;
-const prompt = `I have the following list of ingredients available in my kitchen: ${ingredients.join(', ')} ,and all common masalas and basic ingredients in a kitchen like oil , sugar , salt etc .
+  //  const prompt = `Suggest a recipe using ALL of these ingredients: ${ingredients.join(', ')}`;
+  const prompt = `I have the following list of ingredients available in my kitchen: ${ingredients.join(
+    ', '
+  )} ,and all common masalas and basic ingredients in a kitchen like oil , sugar , salt etc .
 
 Please provide me with 6 - 9 distinct and delicious recipes that I can make using primarily these ingredients. For each recipe, adhere to the following strict format requirements, suitable for direct display in a Next.js web application using react-markdown and react-syntax-highlighter (for code blocks, if any, but unlikely for recipes):
 
@@ -100,94 +106,98 @@ Recipe Generation Guidelines:
 Prioritize Available Ingredients: Focus on recipes that primarily use the provided ingredients. Minor, common pantry staples (like salt, pepper, water, basic cooking oil) can be assumed if essential, but do not introduce major new ingredients not listed.
 Variety (if possible): If the ingredients allow, provide a variety of meal types (e.g., breakfast, lunch, dinner, snack).
 Clarity and Conciseness: Instructions should be clear, step-by-step, and concise.
-Yield/Servings (Optional but helpful): If feasible, include an estimated serving size or yield.` ;
+Yield/Servings (Optional but helpful): If feasible, include an estimated serving size or yield.`
 
+  // const prompt = `You are a recipe generator AI. I will provide you with some ingredients : ${ingredients.join(' , ')} .
+  // You must generate exactly 3 recipes using only those ingredients.
 
-// const prompt = `You are a recipe generator AI. I will provide you with some ingredients : ${ingredients.join(' , ')} . 
-// You must generate exactly 3 recipes using only those ingredients.
+  // STRICT RULES:
+  // 1. Your response must be in **pure Markdown only**.
+  //    - Do NOT use any HTML tags like <u>, <br>, <ol>, <li>, <div>, or inline CSS.
+  //    - Only use Markdown syntax.
 
-// STRICT RULES:
-// 1. Your response must be in **pure Markdown only**.  
-//    - Do NOT use any HTML tags like <u>, <br>, <ol>, <li>, <div>, or inline CSS.  
-//    - Only use Markdown syntax.
+  // 2. **Recipe Titles**
+  //    - Each recipe must start with a numbered level 2 heading.
+  //    - Example:
+  //      ## 1. Fresh Tomato Salad
+  //      ## 2. Tomato Soup
+  //      ## 3. Tomato Preserve
 
-// 2. **Recipe Titles**  
-//    - Each recipe must start with a numbered level 2 heading.  
-//    - Example:  
-//      ## 1. Fresh Tomato Salad  
-//      ## 2. Tomato Soup  
-//      ## 3. Tomato Preserve  
+  // 3. **Ingredients Section**
+  //    - Use bold text for the section heading: "**Ingredients**"
+  //    - List items as a **numbered list**, like this:
+  //      1. Item one
+  //      2. Item two
+  //      3. Item three
 
-// 3. **Ingredients Section**  
-//    - Use bold text for the section heading: "**Ingredients**"  
-//    - List items as a **numbered list**, like this:  
-//      1. Item one  
-//      2. Item two  
-//      3. Item three  
+  // 4. **Instructions Section**
+  //    - Use bold text for the section heading: "**Instructions**"
+  //    - Write each step as a **numbered list**, like this:
+  //      1. Do this
+  //      2. Do that
+  //      3. Finish
 
-// 4. **Instructions Section**  
-//    - Use bold text for the section heading: "**Instructions**" 
-//    - Write each step as a **numbered list**, like this:  
-//      1. Do this  
-//      2. Do that  
-//      3. Finish  
+  // 5. Formatting Rules
+  //    - Separate recipes with **two blank lines**.
+  //    - Do not use dashes `-` for bullet points. Always use 1), 2), 3) for lists.
+  //    - Do not include any extra commentary, only the recipes.
 
-// 5. Formatting Rules  
-//    - Separate recipes with **two blank lines**.  
-//    - Do not use dashes `-` for bullet points. Always use 1), 2), 3) for lists.  
-//    - Do not include any extra commentary, only the recipes.
+  // BAD (don't do this):
+  // - <u>Ingredients</u>
+  // - <br>
+  // - - Salt
 
-// BAD (don't do this):  
-// - <u>Ingredients</u>  
-// - <br>  
-// - - Salt  
+  // GOOD (do like this): 1. Fresh Tomato Salad
 
-// GOOD (do like this): 1. Fresh Tomato Salad
+  // Ingredients
 
-// Ingredients
+  // 1) 2 Tomato
 
-// 1) 2 Tomato
+  // 2) 40ml Olive oil
 
-// 2) 40ml Olive oil
+  // 3) 30gm Salt
 
-// 3) 30gm Salt
+  // Instructions
 
-// Instructions
+  // 1) Wash the tomato
 
-// 1) Wash the tomato
+  // 2) Slice thinly
 
-// 2) Slice thinly
+  // 3) Add salt and oil
 
-// 3) Add salt and oil
+  // Now, generate 3 recipes with the given ingredients in exactly this format.
+  // `
 
-
-
-// Now, generate 3 recipes with the given ingredients in exactly this format.
-// `
-
-
-const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts : [{text: prompt}]
-          },
-        ],
-      }),
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: prompt }],
+            },
+          ],
+        }),
+      }
+    )
+    if (!response.ok) {
+      const data = await response.json()
+      console.log(`Getting error from the gemini API❌❌\n`)
+      console.log(data) 
+      const errText = await response.text()
+      return NextResponse.json({error:`Error from the Gemini API:\n${errText}`},{status:400})
     }
-  );
+    
+    const data = await response.json()
+    //console.log(`Data from gemini API :\n${data}\n\n\n\n\nRECIPE:\n${data.candidates?.[0]?.content?.parts?.[0]?.text}`)
+    return NextResponse.json({recipe:data.candidates?.[0]?.content?.parts?.[0]?.text},{status:200})
 
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`HTTP error! Status: ${response.status}, Body: ${errText}`);
+  } catch (e) {
+    return NextResponse.json({error:e},{status:400})
   }
-
-  const data = await response.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry  , we cannot  find a good recipe for you 😞 ,\nPlease try again ...., \nand if the problem persists then give us some more ingredients so that we can propvide you some good recipies🔥😋z !! ';
 }

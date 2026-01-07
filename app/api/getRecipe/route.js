@@ -1,26 +1,38 @@
-import fetchGemini from '../../lib/fetchGemini.js' ; 
+import fetchGemini from '../../lib/Ai-APIs/fetchGemini.js'
+import { NextResponse } from 'next/server'
 
 export async function GET(req) {
   try {
-    const { searchParams } = new URL(req.url);
-    const ingredientsParam = searchParams.get('ingredients');
+    const { searchParams } = new URL(req.url)
+    const ingredientsParam = searchParams.get('ingredients')
 
     if (!ingredientsParam) {
-      return new Response(JSON.stringify({ error: 'Ingredients are required' }), { status: 400 });
+      return new NextResponse.json(
+        { error: 'Ingredients are required' },
+        { status: 400 }
+      )
     }
 
-    const ingredients = ingredientsParam.split(',').map(i => i.trim());
-    const recipe = await fetchGemini(ingredients);
+    const ingredients = ingredientsParam.split(',').map((i) => i.trim())
+    const response = await fetchGemini(ingredients)
 
-    return new Response(JSON.stringify({ recipe }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    if (!response.ok)
+      return NextResponse.json({ error: response.error }, { status: 400 })
+
+    const data = await response.json()
+    //console.log(`data from the fetchGemini function :\n`)
+    //console.log(JSON.stringify(data, null, 2))
+    return NextResponse.json(
+      { recipe: data.recipe },
+      { status: 200 }
+      //{ headers: { 'Content-Type': 'application/json' } }
+    )
   } catch (error) {
-    console.error('Error fetching recipe:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    console.error('Error fetching recipe:', error)
+    return NextResponse(
+      { error },
+      { status: 400 }
+      //{ headers: { 'Content-Type': 'application/json' } }
+    )
   }
 }
