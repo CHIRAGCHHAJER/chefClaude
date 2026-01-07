@@ -23,6 +23,10 @@ export default function Home() {
     //let ingredientsFromUser = ingredients ;
     // const recipe =  await askGemini(ingredientsFromUser) ;
     // console.log("Recipe received at the frontEnd from Gemini✅: " , recipe ) ;
+    if(searching)
+       return
+       
+
     setError("")
     setSearching(true)
     const ingredientString = ingredients.map((i) => i.trim()).join(',')
